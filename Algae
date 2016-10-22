@@ -1,0 +1,30 @@
+## import the data
+library(DMwR)
+
+head(algae)
+
+## get the general idea about the dataset
+summary(algae)
+
+## view the distribution of data concerning to a specific variable
+hist(algae$mxPH, prob = T)
+
+hist(algae$mxPH, prob = F) ## this will give the counts of frequency
+
+## view Q-Q map to see if the distribution of a specific variable conform to the normal distribution
+library(car)
+par(mfrow = c(1,2))     ## set the figures to show at one row and two columns
+hist(algae$mxPH, prob = T, xlab = "", main = "Histgram of maximum pH value", ylim = 0:1)
+lines(density(algae$mxPH,na.rm = T))
+rug(jitter(algae$mxPH))
+qq.plot(algae$mxPH, main = "Normal QQ plot of maximum pH")
+par(mfrow = c(1,1))
+
+
+
+
+
+
+
+
+
