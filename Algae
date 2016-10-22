@@ -15,10 +15,13 @@ hist(algae$mxPH, prob = F) ## this will give the counts of frequency
 library(car)
 par(mfrow = c(1,2))     ## set the figures to show at one row and two columns
 hist(algae$mxPH, prob = T, xlab = "", main = "Histgram of maximum pH value", ylim = 0:1)
-lines(density(algae$mxPH,na.rm = T))
-rug(jitter(algae$mxPH))
-qq.plot(algae$mxPH, main = "Normal QQ plot of maximum pH")
+lines(density(algae$mxPH,na.rm = T))      ## add a smooth line of the distribution of the data
+rug(jitter(algae$mxPH))                  ## add the density dots under the X axis to help to find the outliers
+qq.plot(algae$mxPH, main = "Normal QQ plot of maximum pH")    ## the dots in the dash lines are indicating the data fitted in the 95% confidence intervl, the dots are not in the dash lines are indicating the data which do not conform to the normal distribution.
 par(mfrow = c(1,1))
+
+
+
 
 
 
