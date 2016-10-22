@@ -22,9 +22,18 @@ par(mfrow = c(1,1))
 
 
 
+## view the distribution of data concerning to a specific variable via boxplot
+boxplot(algae$oPO4, ylab = "Orthophosphate (oOP4)")
+rug(jitter(algae$oPO4), side= 2)
+abline(h = mean(algae$oPO4, na.rm = T), lty = 2)
 
 
-
+## identify the outliers of the dataset
+plot(algae$NH4, xlab = "")
+abline(h = mean(algae$NH4, na.rm = T), lty = 1)
+abline(h = mean(algae$NH4, na.rm = T) + sd(algae$NH4, na.rm = T), lty = 2)
+identify(algae$NH4)
+## press esc to quit the identification of the dots
 
 
 
