@@ -33,7 +33,20 @@ plot(algae$NH4, xlab = "")
 abline(h = mean(algae$NH4, na.rm = T), lty = 1)
 abline(h = mean(algae$NH4, na.rm = T) + sd(algae$NH4, na.rm = T), lty = 2)
 identify(algae$NH4)
-## press esc to quit the identification of the dots
+## press esc or right click to quit the identification of the dots(the number of rows of the dot you identified will appear on the plot)
+
+
+## examine the dots you identified on the plot\
+plot(algae$NH4, xlab = "")
+clicked.lines <- identify(algae$NH4)
+algae[clicked.lines, ]
+
+
+
+
+
+
+
 
 
 
