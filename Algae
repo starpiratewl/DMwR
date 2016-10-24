@@ -126,6 +126,46 @@ algae[48,"mxPH"] <- mean(algae$mxPH, na.rm = T)
 ## if the variables do not conform to normal distribution, it not suitable to substitute the NA with mean, because the data distribution has bias, under this circumstance, median is a better choice.
 algae[is.na(algae$Chla),"Chla"] <- median(algae$Chla, na,rm = T)
 
+##the centralImputation() function in DMwR package provide the method of substituting the NAs with central trend values(median or mode)
+data(algae)
+algae_test <- algae[-manyNAs(algae),]
+algae_test <- centralImputation(algae_test)
+
+
+
+
+##although filling the NAs with central trend values is very convenient, but sometimes it not good for big dataset, especially not good for datamining, because datamining aims at discovering the relations.
+##  so a better choice in dealing wiht NA is substitution NAs with relations to another variable
+
+## find all the correlation values, here the parameter use = "complete.obs" means we omit the NAs
+cor(algae[,4:18], use = "complete.obs")
+
+## but the output of cor() function is not very friendly, we can use symnum() function to get a more appropriate result.
+symnum(cor(algae[, 4:18], use = "complete.obs"))
+
+## in this output we can find that most variables are not corelated with each other, but there are exceptions. NH4 to NO3, PO4 to oPO4. Further more the relationship between NH4 to NO3 is not so significant(0.72467766), so it is not a good idea to use this relationship to predict missing values, but the relationship between PO4 and oPO4 is significant(0.911964602), so we can make use of that.
+data(algae)
+algae <- algae[-manyNAs(algae), ]
+lm(PO4 ~ oPO4, data = algae)
+##Call:
+##lm(formula = PO4 ~ oPO4, data = algae)
+##
+##Coefficients:
+##(Intercept)         oPO4  
+##     42.897        1.293  
+
+##so the result indicate that PO4 = 42.897 + 1.293*oPO4
+
+## substitute the NAs with the help of linear mode
+data(algae)
+algae <- algae[-manyNAs(algae), ]
+fillPO4 <- function(oP){
+  if(is.na(oP))
+    return(NA)
+  else return(42.897 + 1.293*oP)
+}
+algae[is.na(algae$PO4),"PO4"] <- sapply(algae[is.na(algae$PO4),"PO4"], fillPO4)
+
 
 
 
