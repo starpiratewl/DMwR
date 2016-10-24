@@ -1,9 +1,15 @@
+#############################################
 ## import the data
+#############################################
 library(DMwR)
 
 head(algae)
 
+
+#############################################
 ## get the general idea about the dataset
+#############################################
+
 summary(algae)
 
 ## view the distribution of data concerning to a specific variable
