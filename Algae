@@ -42,6 +42,28 @@ clicked.lines <- identify(algae$NH4)
 algae[clicked.lines, ]
 
 
+## identify the rows which NH4 is more than 19000
+algae[algae$NH4 > 19000, ]
+##     season   size speed mxPH mnO2     Cl   NO3   NH4 oPO4 PO4 Chla  a1 a2 a3  a4  a5   a6 a7
+##NA     <NA>   <NA>  <NA>   NA   NA     NA    NA    NA   NA  NA   NA  NA NA NA  NA  NA   NA NA
+##153  autumn medium  high  7.3 11.8 44.205 45.65 24064   44  34 53.1 2.2  0  0 1.2 5.9 77.6  0
+##NA.1   <NA>   <NA>  <NA>   NA   NA     NA    NA    NA   NA  NA   NA  NA NA NA  NA  NA   NA NA
+##there are NAs in the result here, this is not the form we prefer, so the alternative solution is as follows:
+
+algae[!is.na(algae$NH4)&algae$NH4 > 19000, ]
+##    season   size speed mxPH mnO2     Cl   NO3   NH4 oPO4 PO4 Chla  a1 a2 a3  a4  a5   a6 a7
+##153 autumn medium  high  7.3 11.8 44.205 45.65 24064   44  34 53.1 2.2  0  0 1.2 5.9 77.6  0
+
+
+
+## use lattice to examine the data distribution of certain variables according to nominal variables
+library(lattice)
+bwplot(size ~ a1, data = algae, ylab = "River Size", xlab = "Algae A1")
+
+
+
+
+
 
 
 
