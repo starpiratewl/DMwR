@@ -167,6 +167,7 @@ fillPO4 <- function(oP){
 algae[is.na(algae$PO4),"PO4"] <- sapply(algae[is.na(algae$PO4),"PO4"], fillPO4)
 
 
+##if we can not find the relationship between the numeric variable, we can turn to find the relationship of specific variable to nominal variables
 
 
 
