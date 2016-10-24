@@ -169,6 +169,36 @@ algae[is.na(algae$PO4),"PO4"] <- sapply(algae[is.na(algae$PO4),"PO4"], fillPO4)
 
 ##if we can not find the relationship between the numeric variable, we can turn to find the relationship of specific variable to nominal variables
 
+histogram(~mxPH | season, data = algae)
+
+algae$season <- factor(algae$season, levels = c("spring", "summer","autumn", "winter"))
+
+##redefine the season nominal variable to set the season in a order we are used to see
+## this figure seem to show that the mxPH variable do not have any relationship with season nomial value, we should try another
+
+## this figure seem to show that the small the size of river is, the small mxPH value it presents
+histogram(~mxPH | size, data = algae)
+
+## this figure present the relationship of mxPH with combination of size and speed variables , in this figure 9 figures are presented and we happen to see that there is a missing in low speed and small size river, only one observation fitted this combination , that is row 48, but this row happened to miss the mxPH value.
+histogram(~mxPH | size * speed, data = algae)
+
+
+## the following figure is another way to discover the relationship of mxPH with the combination of size and speed. The parameter jitter = T is set to tell R to arrange the Y axis value in a random manner, this can avoid the omission of certain concentration due to the overlap of values.
+stripplot(size ~ mxPH | speed, data = algae, jitter = T)
+
+
+
+
+
+## filling the NAs with the comparability of different variables and observations
+data(algae)
+algae <- algae[-manyNAs(algae), ]
+
+## first we have to define the comparability or similarity, the core concept is the euclidean distance, then according to euclidean distance we try to find the 10 most similar cases(observations),then use the median of the ten similar cases or the weighted mean to substitute the NA, the weighted mean is calculated also via the euclidean distance ,the case with most euclidean distance have the least weight, w(d) = e-d(power). All the ideas can be realized via knnImputation() function in the DMwR package.
+
+algae <- knnImputation(algae, k = 10)
+
+algae <- knnImputation(algae, k =10, meth = "median")
 
 
 
