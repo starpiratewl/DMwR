@@ -59,13 +59,43 @@ algae[!is.na(algae$NH4)&algae$NH4 > 19000, ]
 ## use lattice to examine the data distribution of certain variables according to nominal variables
 library(lattice)
 bwplot(size ~ a1, data = algae, ylab = "River Size", xlab = "Algae A1")
+## through this figure we can find that a1 has high frequency in small rivers, this is very useful statistical information
+
+
+##use Hmisc package to achieve similar result as above mentioned.
+library(Hmisc)
+bwplot(size ~ a1, data = algae, panel = panel.bpplot, probs=seq(0.01,0.49,by = 0.01), datadensity = T, ylab = "River Size", xlab = "Algae A1")
+
+
+##to view the data distribution of a variable according to two other variables
+minO2 <- equal.count(na.omit(algae$mnO2), number = 4, overlap = 1/5)
+stripplot(season ~ a3|minO2, data = algae[!is.na(algae$mnO2), ])
+## here we use equal.count() function to turn the numeric variables to nominal variables
 
 
 
 
+#############################################
+## deal with the NAs
+#############################################
+library(DMwR)
+data(algae)
 
+##examine the number of NAs, here we find that there are 16 rows containing NAs
+algae[!complete.cases(algae),]
+nrow(algae[!complete.cases(algae),])
 
+## simply remove all the rows containing NAs
+algae_nona <- na.omit(algae)
 
+## sometimes if an observation(row) containing too many NAs, this observation is not useful, it is better to remove it
+algae_test <- algae[-c(62,199), ]
+
+## but the method mentioned above is unrealizable when we deal a large dataset, we can not to count all the row numbers of NAs
+apply(algae, 1, function(x) sum(is.na(x)))
+## here we use apply() function to apply to rows to calculate the NAs of each row.
+
+## or we can use mangNAs() function to pin point the row numbers of the rows containing too many NAs(note that manyNAs() function is not a default function in R, it is created in DMwR package)
 
 
 
