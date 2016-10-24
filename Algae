@@ -78,6 +78,11 @@ stripplot(season ~ a3|minO2, data = algae[!is.na(algae$mnO2), ])
 #############################################
 ## deal with the NAs
 #############################################
+
+#############################################
+##1, omit method
+#############################################
+
 library(DMwR)
 data(algae)
 
@@ -96,6 +101,29 @@ apply(algae, 1, function(x) sum(is.na(x)))
 ## here we use apply() function to apply to rows to calculate the NAs of each row.
 
 ## or we can use mangNAs() function to pin point the row numbers of the rows containing too many NAs(note that manyNAs() function is not a default function in R, it is created in DMwR package)
+data(algae)
+manyNAs(algae,0.2)
+##in this function wo input the dataset(algae) and the percentage(0.2, means NAs are over 20% of all the variables), then the function will return the rows which fitted the condition.
+##remove the NAs with the help of manyNAs() fcuntion
+algae_test <- algae[-manyNAs(algae,0.2), ]
+
+
+
+#############################################
+##2, filling method
+#############################################
+
+## substitute the NA with mean, this method fit the variables which conform to the normal distribution, because all the observation are distributed equably around the mean
+algae[48,"mxPH"] <- mean(algae$mxPH, na.rm = T)
+
+## substitute the NAs with batch processing
+## if the variables do not conform to normal distribution, it not suitable to substitute the NA with mean, because the data distribution has bias, under this circumstance, median is a better choice.
+algae[is.na(algae$Chla),"Chla"] <- median(algae$Chla, na,rm = T)
+
+
+
+
+
 
 
 
