@@ -559,7 +559,14 @@ bestScores(res.all)
 
 ## the above result suggest that , except for a1, all the kinds of algae do not have ideal predictions. It may tell us that it could be a better choice to use the combination method, and the combinatorial model could overcome the restriction of sigal model. The RandomForest is a competitive method of combinatorial model.
 
+library(randomForest)
 
+cv.rf <- function(form, train, test, ...){
+  m <- randomForest(form, train,...)
+  p <- predict(m, test)
+  mse <- mean((p - resp(form, test))^2)
+  c()
+}
 
 
 
