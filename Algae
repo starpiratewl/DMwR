@@ -557,7 +557,14 @@ plot(res.all)
 
 bestScores(res.all)
 
+
+
+
 ## the above result suggest that , except for a1, all the kinds of algae do not have ideal predictions. It may tell us that it could be a better choice to use the combination method, and the combinatorial model could overcome the restriction of sigal model. The RandomForest is a competitive method of combinatorial model.
+
+data(algae)
+algae <- algae[-manyNAs(algae), ]
+clean.algae <- knnImputation(algae, k = 10)
 
 library(randomForest)
 
@@ -567,6 +574,30 @@ cv.rf <- function(form, train, test, ...){
   mse <- mean((p - resp(form, test))^2)
   c(nmse = mse / mean((mean(resp(form,train)) - resp(form,test))^2))
 }
+
+
+cv.rpart <- function(form, train, test, ...){
+  m <- rpartXse(form, train, ...)
+  p <- predict(m, test)
+  mse <- mean((p - resp(form, test))^2)
+  c(nmse = mse / mean((mean(resp(form, train)) - resp(form, test))^2))
+}
+
+cv.lm <- function(form, train, test, ...){
+  m <- lm(form, train,...)
+  p <- predict(m, test)
+  p <- ifelse(p < 0, 0 ,p)
+  mse <- mean((p - resp(form, train))^2)
+  c(nmse = mse / mean((mean(resp(form, train)) - resp(form, test))^2))
+}
+
+
+DSs <- sapply(names(clean.algae)[12:18],
+  function(x,names.attrs){
+    f <- as.formula(paste(x,"~ ."))
+    dataset(f, clean.algae[,c(names.attrs,x)],x)
+  },
+  names(clean.algae)[1:11])
 
 res.all <- experimentalComparison(
   DSs,
