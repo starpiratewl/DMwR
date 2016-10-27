@@ -606,9 +606,74 @@ res.all <- experimentalComparison(
   variants('cv.rf', ntree = c(200,500,700))),cvSettings(5,10,1234)
 )
 
+bestScores(res.all)
+##$a1
+##       system     score
+##nmse cv.rf.v1 0.5456826
+##
+##$a2
+##       system     score
+##nmse cv.rf.v3 0.7720026
+##
+##$a3
+##       system     score
+##nmse cv.rf.v3 0.9968958
+##
+##$a4
+##       system   score
+##nmse cv.rf.v1 0.97983
+##
+##$a5
+##       system     score
+##nmse cv.rf.v2 0.7877611
+##
+##$a6
+##       system     score
+##nmse cv.rf.v3 0.9091727
+##
+##$a7
+##          system    score
+##nmse cv.rpart.v3 1.029505
+##
+
+## through this result we can find that except for algae7, among almost the prediction models, the combinatorial model seem to precede other sigle model. But these result are not so good especially for algae7. bestScores() function does not tell us if these best models are significantly distinct from other models. So how can we be confident that if we apply these model to other random dataset, we can get the same result? This need to import the compAnalysis()
+
+compAnalysis(res.all, against='cv.rf.v3', datasets=c('a1','a2','a4','a6'))
+##
+##== Statistical Significance Analysis of Comparison Results ==
+##
+##Baseline Learner::       cv.rf.v3  (Learn.1)
+##
+##** Evaluation Metric::   nmse 
+##
+##- Dataset: a1 
+##      Learn.1   Learn.2 sig.2   Learn.3 sig.3   Learn.4 sig.4   Learn.5 sig.5   Learn.6 sig.6   Learn.7 sig.7
+##AVG 0.5465393 1.5287620    ++ 0.6423100    +  0.6569726    ++ 0.6875212    ++ 0.5456826       0.5483328      
+##STD 0.1747913 0.6861785       0.2399321       0.2397636       0.2348946       0.1687116       0.1736505      
+##
+##- Dataset: a2 
+##      Learn.1  Learn.2 sig.2   Learn.3 sig.3    Learn.4 sig.4      Learn.5 sig.5   Learn.6 sig.6   Learn.7 sig.7
+##AVG 0.7720026 1.931029    ++ 1.0426327    ++ 1.01626123    ++ 1.000000e+00    ++ 0.7758019       0.7747957      
+##STD 0.1423794 1.219410       0.2005522       0.07435826       2.389599e-16       0.1522434       0.1417753      
+##
+##- Dataset: a4 
+##      Learn.1  Learn.2 sig.2   Learn.3 sig.3      Learn.4 sig.4      Learn.5 sig.5   Learn.6 sig.6   Learn.7 sig.7
+##AVG 0.9853869 4.958328    ++ 1.0073953    +  1.000000e+00    +  1.000000e+00    +  0.9798300    -  0.9799131      
+##STD 0.3872406 4.186884       0.1065607       2.774424e-16       2.774424e-16       0.3802318       0.3872370      
+##
+##- Dataset: a6 
+##      Learn.1  Learn.2 sig.2   Learn.3 sig.3      Learn.4 sig.4      Learn.5 sig.5   Learn.6 sig.6   Learn.7 sig.7
+##AVG 0.9091727 2.338651    ++ 1.0191041       1.000000e+00       1.000000e+00       0.9206255       0.9107400      
+##STD 0.3473154 1.730085       0.1991436       2.451947e-16       2.451947e-16       0.3544189       0.3478638      
+##
+##Legends:
+##Learners -> Learn.1 = cv.rf.v3 ; Learn.2 = cv.lm.v1 ; Learn.3 = cv.rpart.v1 ; Learn.4 = cv.rpart.v2 ; Learn.5 = cv.rpart.v3 ; Learn.6 = cv.rf.v1 ; Learn.7 = cv.rf.v2 ; 
+##Signif. Codes -> 0 '++' or '--' 0.001 '+' or '-' 0.05 ' ' 1
 
 
-
+#################################################################
+## predict the specific variable, apply model to random dataset
+#################################################################
 
 
 
