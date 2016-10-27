@@ -603,7 +603,7 @@ res.all <- experimentalComparison(
   DSs,
   c(variants('cv.lm'),
   variants('cv.rpart', se = c(0,0.5,1)),
-  variants('cv.rf', ntree = c(200,500,700)),),cvSettings(5,10,1234)
+  variants('cv.rf', ntree = c(200,500,700))),cvSettings(5,10,1234)
 )
 
 
