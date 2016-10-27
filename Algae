@@ -675,6 +675,87 @@ compAnalysis(res.all, against='cv.rf.v3', datasets=c('a1','a2','a4','a6'))
 ## predict the specific variable, apply model to random dataset
 #################################################################
 
+bestModelsNames <- sapply(bestScores(res.all), function(x) x['nmse','system'])
+
+learners <- c(rf = 'randomForest', rpart='rpartXse')
+
+funcs <- learners[sapply(strsplit(bestModelsNames,'\\.'), function(x) x[2])]
+
+parSetts <- lapply(bestModelsNames, function(x) getVariant(x, res.all)@pars)
+
+bestModels <- list()
+
+for(a in 1:7){
+  form <- as.formula(paste(names(clean.algae)[11+a],'~ .'))
+  bestModels[[a]] <- do.call(funcs[a], c(list(form, clean.algae[,c(1:11,11+a)]), parSetts[[a]]))
+}
+
+## the test dataset still contain NAs so we should remove them or fill them, be careful here, we can never use test dataset to fill the NAs, we should use train dataset to predict and fill the NAs.
+
+clean.test.algae <- knnImputation(test.algae, k = 10, distData = algae[, 1:11])
+
+preds <- matrix(ncol = 7, nrow = 140)
+
+for(i in 1:nrow(clean.test.algae)){
+  preds[i,] <- sapply(1:7, function(x) predict(bestModels[[x]], clean.test.algae[1,]))
+}
+
+
+## evaluate the prediction model through the comparison between predictive value and true value
+
+avg.preds <- apply(algae[,12:18],2,mean)
+
+apply(((algae.sols - preds)^2),2,mean) / apply((scale(algae.sols, avg.preds, F)^2),2,mean)
+##       a1        a2        a3        a4        a5        a6        a7 
+##1.3909196 0.9963085 1.0117181 1.3046203 1.0118959 0.9939222 1.0000000 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
